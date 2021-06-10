@@ -4,7 +4,7 @@ macro(initialize_project _source_path)
     string(REPLACE "-" "_" PROJECT_NAME_UPPERCASE ${PROJECT_NAME_UPPERCASE})
 
     foreach(DEPENDENCY ${ADDON_EXTERNAL_DEPS})
-        hunter_add_package(${DEPENDENCY})
+#        hunter_add_package(${DEPENDENCY})
     endforeach()
 
     add_subdirectory(${ADDON_LIBS_DIR})
