@@ -1,4 +1,4 @@
-macro(create_library _version _desc)
+macro(create_library _version _desc _cmake_exports)
   get_library_name(LIBRARY_NAME)
   get_library_name_uppercase(LIBRARY_NAME_UPPERCASE)
 
@@ -15,13 +15,13 @@ macro(create_library _version _desc)
   collect_library_headers("${LIBRARY_INCLUDE_DIR}" "LIBRARY_HEADERS")
   collect_library_sources("${LIBRARY_SOURCE_DIR}" "LIBRARY_SOURCES")
 
-  add_library(${LIBRARY_NAME} ${LIBRARY_HEADERS} ${LIBRARY_SOURCES})
+  add_library(${LIBRARY_NAME} SHARED ${LIBRARY_HEADERS} ${LIBRARY_SOURCES})
   target_link_libraries(${LIBRARY_NAME} PRIVATE ${ARGN})
   set_target_properties(${LIBRARY_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 
   library_include_private_headers(${LIBRARY_INCLUDE_DIR})
   library_include_public_headers(${LIBRARY_INCLUDE})
-  library_install("${LIBRARY_INCLUDE_DIR}")
+  library_install(${LIBRARY_INCLUDE_DIR} ${_cmake_exports} ${ARGN})
 
   create_library_tests(${ARGN})
 endmacro()

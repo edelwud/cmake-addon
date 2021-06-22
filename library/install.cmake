@@ -86,8 +86,22 @@ macro(library_install_cmake_config _include_dir)
   export(PACKAGE ${PROJECT_NAME})
 endmacro()
 
-macro(library_install _include_dir)
+macro(library_install_pkg_config)
+  set(includedir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR})
+  set(libdir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
+  set(prefix ${CMAKE_INSTALL_PREFIX})
+
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${LIBRARY_NAME}.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.pc @ONLY)
+
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.pc
+          DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+endmacro()
+
+macro(library_install _include_dir _cmake_exports)
   library_install_headers(${_include_dir})
   library_install_export_headers()
-  library_install_cmake_config(${_include_dir})
+  if (${_cmake_exports})
+    library_install_cmake_config(${_include_dir})
+  endif()
+  library_install_pkg_config(${ARGN})
 endmacro()
