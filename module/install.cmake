@@ -1,4 +1,4 @@
-macro(library_install_headers _include_dir)
+macro(module_install_headers _include_dir)
   install(
     TARGETS ${PROJECT_NAME}
     EXPORT ${PROJECT_NAME}Targets
@@ -12,7 +12,7 @@ macro(library_install_headers _include_dir)
   install(DIRECTORY ${_include_dir} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 endmacro()
 
-macro(library_install_export_headers)
+macro(module_install_export_headers)
   include(GenerateExportHeader)
   generate_export_header(
     ${PROJECT_NAME}
@@ -23,14 +23,14 @@ macro(library_install_export_headers)
     PREFIX_NAME
     ${PROJECT_NAME}_
     EXPORT_FILE_NAME
-    ${CMAKE_BINARY_DIR}/${ADDON_LIBRARY_INCLUDE_EXPORTS_DIR}/${PROJECT_NAME}/export.h
+    ${CMAKE_BINARY_DIR}/${ADDON_MODULE_INCLUDE_EXPORTS_DIR}/${PROJECT_NAME}/export.h
   )
   install(DIRECTORY ${CMAKE_BINARY_DIR}/${ADDON_LIBRARY_INCLUDE_EXPORTS_DIR}/
           DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   )
 endmacro()
 
-macro(library_project_properties)
+macro(module_project_properties)
   set_property(TARGET ${PROJECT_NAME} PROPERTY VERSION ${PROJECT_VERSION})
   set_property(TARGET ${PROJECT_NAME} PROPERTY SOVERSION ${PROJECT_VERSION_MAJOR})
   set_property(
@@ -44,13 +44,13 @@ macro(library_project_properties)
   )
 endmacro()
 
-macro(library_install_cmake_config _include_dir)
+macro(module_install_cmake_config _include_dir)
   include(CMakePackageConfigHelpers)
 
-  library_project_properties()
+  module_project_properties()
 
   write_basic_package_version_file(
-    "${ADDON_LIBRARY_PACKAGES_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    "${ADDON_MODULE_PACKAGES_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
     VERSION ${PROJECT_VERSION}
     COMPATIBILITY SameMajorVersion
   )
@@ -64,21 +64,21 @@ macro(library_install_cmake_config _include_dir)
   set(${PROJECT_NAME}_INCLUDE_DIR "${_include_dir}")
   configure_package_config_file(
     ${CMAKE_SOURCE_DIR}/cmake/Config.cmake.in
-    "${ADDON_LIBRARY_PACKAGES_DIR}/${PROJECT_NAME}Config.cmake"
+    "${ADDON_MODULE_PACKAGES_DIR}/${PROJECT_NAME}Config.cmake"
     INSTALL_DESTINATION lib/cmake/${PROJECT_NAME}
     PATH_VARS ${PROJECT_NAME}_INCLUDE_DIR
   )
 
   install(
     EXPORT ${PROJECT_NAME}Targets
-    FILE ${PROJECT_NAME}.cmake
+    FILE ${PROJECT_NAME}Targets.cmake
     NAMESPACE ${PROJECT_NAME}::
     DESTINATION lib/cmake/${PROJECT_NAME}
   )
 
   install(
-    FILES "${ADDON_LIBRARY_PACKAGES_DIR}/${PROJECT_NAME}Config.cmake"
-          "${ADDON_LIBRARY_PACKAGES_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    FILES "${ADDON_MODULE_PACKAGES_DIR}/${PROJECT_NAME}Config.cmake"
+          "${ADDON_MODULE_PACKAGES_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
     DESTINATION lib/cmake/${PROJECT_NAME}
     COMPONENT Devel
   )
@@ -86,22 +86,26 @@ macro(library_install_cmake_config _include_dir)
   export(PACKAGE ${PROJECT_NAME})
 endmacro()
 
-macro(library_install_pkg_config)
+macro(module_install_pkg_config)
   set(includedir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR})
   set(libdir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
   set(prefix ${CMAKE_INSTALL_PREFIX})
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${LIBRARY_NAME}.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.pc @ONLY)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_NAME}.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.pc @ONLY)
 
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.pc
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.pc
           DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 endmacro()
 
-macro(library_install _include_dir _cmake_exports)
-  library_install_headers(${_include_dir})
-  library_install_export_headers()
-  if (${_cmake_exports})
-    library_install_cmake_config(${_include_dir})
+macro(module_install _include_dir _pkgconf _cmake)
+  module_install_headers(${_include_dir})
+  if (${MODULE_TYPE} MATCHES library)
+    module_install_export_headers()
+    if(${_cmake})
+      module_install_cmake_config(${_include_dir})
+    endif()
+    if(_pkgconf)
+      module_install_pkg_config(${ARGN})
+    endif()
   endif()
-  library_install_pkg_config(${ARGN})
 endmacro()
