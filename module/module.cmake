@@ -54,7 +54,7 @@ macro(create_module_tests)
   set(MODULE_TESTS_NAME "test_${PROJECT_NAME}")
   add_executable(${MODULE_TESTS_NAME} ${MODULE_TESTS})
 
-  target_link_libraries(${MODULE_TESTS_NAME} ${ARGN} gtest)
+  target_link_libraries(${MODULE_TESTS_NAME} ${ARGN} CONAN_PKG::gtest)
   if(${MODULE_TYPE} MATCHES library)
     target_link_libraries(${MODULE_TESTS_NAME} ${PROJECT_NAME})
   endif()

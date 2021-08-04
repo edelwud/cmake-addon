@@ -6,7 +6,6 @@ include("${CMAKE_ADDON_PATH}/CPM.cmake")
 
 file(GLOB_RECURSE CMAKE_CONFIGS ${CMAKE_ADDON_PATH}/**/*.cmake)
 list(APPEND CMAKE_CONFIGS "${CMAKE_ADDON_PATH}/defaults.cmake")
-list(APPEND CMAKE_CONFIGS "${CMAKE_ADDON_PATH}/external.cmake")
 list(APPEND CMAKE_CONFIGS "${CMAKE_ADDON_PATH}/formatter.cmake")
 foreach(CMAKE ${CMAKE_CONFIGS})
   include(${CMAKE})
