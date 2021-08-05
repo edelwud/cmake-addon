@@ -72,7 +72,7 @@ macro(module_install_pkg_config)
   set(libdir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
   set(prefix ${CMAKE_INSTALL_PREFIX})
 
-  configure_file(${CMAKE_SOURCE_DIR}/cmake/templates/module.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.pc @ONLY)
+  configure_file(${ADDON_PATH}/templates/module.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.pc @ONLY)
 
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.pc
           DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
@@ -84,7 +84,7 @@ macro(module_install _include_dir _pkgconf _cmake)
     if(${_cmake})
       module_install_cmake_config(${_include_dir})
     endif()
-    if(_pkgconf)
+    if(${_pkgconf})
       module_install_pkg_config(${ARGN})
     endif()
   endif()
