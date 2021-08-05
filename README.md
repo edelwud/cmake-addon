@@ -1,4 +1,10 @@
-# CMake Addon
+```
+   ____ __  __       _             _       _     _             
+  / ___|  \/  | __ _| | _____     / \   __| | __| | ___  _ __  
+ | |   | |\/| |/ _` | |/ / _ \   / _ \ / _` |/ _` |/ _ \| '_ \ 
+ | |___| |  | | (_| |   <  __/  / ___ \ (_| | (_| | (_) | | | |
+  \____|_|  |_|\__,_|_|\_\___| /_/   \_\__,_|\__,_|\___/|_| |_|
+```
 CMake Addon production ready extension for C/C++ project making it easy to split 
 the project into modules and submodules which are dynamic and static libraries, 
 includes package manager CPM & Conan, doxygen docs system, 
@@ -22,19 +28,18 @@ provides useful build/install systems and test system.
 
 ## Module structure
 ```
-+ <library-name>
-    + include (defenitions)
-        + <library-name>
-            - header.h
-            - ...
-    + src
-        - source.cpp
-        - ...
-    + tests
-        - main.cpp
-        - test_xxx.cpp
-    - CMakeLists.txt
-    - version.h.in
+<library-name>             # library that application uses
+├── include                # library definitions
+|   └── <library-name>     # definition namespace
+|       ├── header.h(pp)
+|       └── ...
+├── src                    # source code 
+|   ├── source.c(pp)
+|   └── ...
+├── tests                  # unit tests
+|   ├── main.cpp
+|   └── test_***.cpp       # expected source files with `test_` prefix
+└── CMakeLists.txt         # expected `create_module` function
 ```
 * Name of module will be equal to _<library-name>_
 * CMakeLists.txt contains module declaration
@@ -84,6 +89,6 @@ initialize_project(${CMAKE_CURRENT_SOURCE_DIR})
   `libs` directory in root should contain library modules which includes into project with
   `add_subdirectory` function
   
-<hr>
+***
 
-_LICENSE GPL-3.0_
+LICENSE GPL-3.0
