@@ -63,17 +63,16 @@ macro(create_module_tests)
   endif()
 endmacro()
 
-
 macro(validate_module)
-  if (NOT EXISTS "${MODULE_INCLUDE_DIR}")
+  if(NOT EXISTS "${MODULE_INCLUDE_DIR}")
     message(FATAL_ERROR "Module ${MODULE_NAME} should contain \"${MODULE_INCLUDE_DIR}\" directory")
   endif()
 
-  if (NOT EXISTS "${MODULE_SOURCE_DIR}")
+  if(NOT EXISTS "${MODULE_SOURCE_DIR}")
     message(FATAL_ERROR "Module ${MODULE_NAME} should contain \"${MODULE_SOURCE_DIR}\" directory")
   endif()
 
-  if (NOT EXISTS "${MODULE_TESTS_DIR}")
+  if(NOT EXISTS "${MODULE_TESTS_DIR}")
     message(FATAL_ERROR "Module ${MODULE_NAME} should contain \"${MODULE_TESTS_DIR}\" directory")
   endif()
 endmacro()
