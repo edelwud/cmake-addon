@@ -63,7 +63,7 @@ macro(module_install_cmake_config _include_dir)
   set(CONFIG_DIR ${CMAKE_BINARY_DIR})
   set(${PROJECT_NAME}_INCLUDE_DIR "${_include_dir}")
   configure_package_config_file(
-    ${CMAKE_SOURCE_DIR}/cmake/Config.cmake.in
+    ${CMAKE_SOURCE_DIR}/cmake/templates/module.cmake.in
     "${ADDON_MODULE_PACKAGES_DIR}/${PROJECT_NAME}Config.cmake"
     INSTALL_DESTINATION lib/cmake/${PROJECT_NAME}
     PATH_VARS ${PROJECT_NAME}_INCLUDE_DIR
@@ -91,7 +91,7 @@ macro(module_install_pkg_config)
   set(libdir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
   set(prefix ${CMAKE_INSTALL_PREFIX})
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_NAME}.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.pc @ONLY)
+  configure_file(${CMAKE_SOURCE_DIR}/cmake/templates/module.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.pc @ONLY)
 
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.pc
           DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
