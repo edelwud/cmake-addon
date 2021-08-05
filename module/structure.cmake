@@ -9,15 +9,15 @@ macro(get_module_name_uppercase _result)
 endmacro()
 
 macro(collect_module_headers _include_path _result)
-  file(GLOB_RECURSE ${_result} ${_include_path}/*.h)
+  file(GLOB_RECURSE ${_result} ${_include_path}/*.h*)
 endmacro()
 
 macro(collect_module_sources _source_path _result)
-  file(GLOB_RECURSE ${_result} ${_source_path}/*.cpp)
+  file(GLOB_RECURSE ${_result} ${_source_path}/*.c*)
 endmacro()
 
 macro(collect_module_tests _tests_path _result)
-  file(GLOB_RECURSE ${_result} ${_tests_path}/*.cpp)
+  file(GLOB_RECURSE ${_result} ${_tests_path}/*.c*)
 endmacro()
 
 macro(module_include_private_headers _include_path)
