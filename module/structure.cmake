@@ -8,22 +8,6 @@ macro(get_module_name_uppercase _result)
   string(REPLACE "-" "_" ${_result} ${${_result}})
 endmacro()
 
-macro(get_module_include _result)
-  set(${_result} "${CMAKE_CURRENT_SOURCE_DIR}/${ADDON_MODULE_INCLUDE_DIR}")
-endmacro()
-
-macro(get_module_include_dir _result)
-  set(${_result} "${CMAKE_CURRENT_SOURCE_DIR}/${ADDON_MODULE_INCLUDE_DIR}/${PROJECT_NAME}")
-endmacro()
-
-macro(get_module_source_dir _result)
-  set(${_result} "${CMAKE_CURRENT_SOURCE_DIR}/${ADDON_MODULE_SOURCE_DIR}")
-endmacro()
-
-macro(get_module_tests_dir _result)
-  set(${_result} "${CMAKE_CURRENT_SOURCE_DIR}/${ADDON_MODULE_TESTS_DIR}")
-endmacro()
-
 macro(collect_module_headers _include_path _result)
   file(GLOB_RECURSE ${_result} ${_include_path}/*.h)
 endmacro()
@@ -34,10 +18,6 @@ endmacro()
 
 macro(collect_module_tests _tests_path _result)
   file(GLOB_RECURSE ${_result} ${_tests_path}/*.cpp)
-endmacro()
-
-macro(collect_module_version _include_path)
-  configure_file(${_include_path}/version.h.in ${CMAKE_CURRENT_BINARY_DIR}/version.h @ONLY)
 endmacro()
 
 macro(module_include_private_headers _include_path)

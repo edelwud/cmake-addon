@@ -11,25 +11,6 @@ macro(module_install_headers _include_dir)
   install(DIRECTORY ${_include_dir} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 endmacro()
 
-macro(module_install_export_headers)
-#  include(GenerateExportHeader)
-#  generate_export_header(
-#    ${PROJECT_NAME}
-#    EXPORT_MACRO_NAME
-#    EXPORT
-#    NO_EXPORT_MACRO_NAME
-#    NO_EXPORT
-#    PREFIX_NAME
-#    ${PROJECT_NAME}_
-#    EXPORT_FILE_NAME
-#    ${CMAKE_BINARY_DIR}/${ADDON_MODULE_INCLUDE_EXPORTS_DIR}/${PROJECT_NAME}/export.h
-#  )
-#  install(
-#    DIRECTORY ${CMAKE_BINARY_DIR}/${ADDON_LIBRARY_INCLUDE_EXPORTS_DIR}/
-#    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-#  )
-endmacro()
-
 macro(module_project_properties)
   set_property(TARGET ${PROJECT_NAME} PROPERTY VERSION ${PROJECT_VERSION})
   set_property(TARGET ${PROJECT_NAME} PROPERTY SOVERSION ${PROJECT_VERSION_MAJOR})
@@ -100,7 +81,6 @@ endmacro()
 macro(module_install _include_dir _pkgconf _cmake)
   module_install_headers(${_include_dir})
   if (${MODULE_TYPE} MATCHES library)
-    module_install_export_headers()
     if(${_cmake})
       module_install_cmake_config(${_include_dir})
     endif()
