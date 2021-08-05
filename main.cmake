@@ -6,20 +6,18 @@ endif()
 
 include(${ADDON_PATH}/tools.cmake)
 include(${ADDON_PATH}/CPM.cmake)
+include(${ADDON_PATH}/predefines.cmake)
 
-set(ADDON_DOCS docs)
 set(ADDON_DOCS_PATH ${CMAKE_SOURCE_DIR}/${ADDON_DOCS})
 if(NOT EXISTS "${ADDON_DOCS_PATH}")
   message(FATAL_ERROR "Change name of docs directory to `${ADDON_DOCS}`")
 endif()
 
-set(ADDON_LIBS libs)
 set(ADDON_LIBS_PATH ${CMAKE_SOURCE_DIR}/${ADDON_LIBS})
 if(NOT EXISTS "${ADDON_LIBS_PATH}")
   message(FATAL_ERROR "Change name of libs directory to `${ADDON_LIBS}`")
 endif()
 
-get_last_dirname(${CMAKE_SOURCE_DIR} ADDON_APP)
 set(ADDON_APP_PATH ${CMAKE_SOURCE_DIR}/${ADDON_APP})
 if(NOT EXISTS "${ADDON_APP_PATH}")
   message(FATAL_ERROR "Change name of app directory to `${ADDON_APP}`")

@@ -1,9 +1,9 @@
-macro(initialize_project _source_path)
-  string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPERCASE)
-  string(REPLACE "-" "_" PROJECT_NAME_UPPERCASE ${PROJECT_NAME_UPPERCASE})
+macro(initialize_project)
+  include(GNUInstallDirs)
 
-  set(ADDON_SOURCE_DIR "${PROJECT_NAME}")
+  include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+  conan_basic_setup(TARGETS)
 
-  add_subdirectory(${ADDON_LIBS_DIR})
-  add_subdirectory(${ADDON_SOURCE_DIR})
+  add_subdirectory(${ADDON_LIBS})
+  add_subdirectory(${ADDON_APP})
 endmacro()
