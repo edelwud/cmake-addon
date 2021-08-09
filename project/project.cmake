@@ -1,4 +1,5 @@
 macro(initialize_project)
+  include(${ADDON_DIRNAME}/doxygen.cmake)
   include(GNUInstallDirs)
 
   include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
