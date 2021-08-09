@@ -23,12 +23,11 @@ endmacro()
 macro(module_include_private_headers _include_path)
   target_include_directories(
     ${PROJECT_NAME} PRIVATE $<BUILD_INTERFACE:${_include_path}>
-                            $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
-  )
+                            $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
 endmacro()
 
 macro(module_include_public_headers _include)
   target_include_directories(
-    ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${_include}> $<INSTALL_INTERFACE:include}>
-  )
+    ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${_include}>
+                           $<INSTALL_INTERFACE:include}>)
 endmacro()
