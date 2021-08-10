@@ -1,4 +1,4 @@
-cpmaddpackage("gh:StableCoder/cmake-scripts#21.01")
+CPMAddPackage("gh:StableCoder/cmake-scripts#21.01")
 
 set(CLANG_TIDY ON)
 
@@ -19,6 +19,5 @@ foreach(BUILD_CMAKE ${CMAKE_BUILD_CODE})
   list(REMOVE_ITEM CMAKE_CODE ${BUILD_CMAKE})
 endforeach()
 
-clang_format(clang-format ${APP_HEADERS} ${APP_SOURCES} ${LIBS_HEADERS}
-             ${LIBS_SOURCES})
+clang_format(clang-format ${APP_HEADERS} ${APP_SOURCES} ${LIBS_HEADERS} ${LIBS_SOURCES})
 cmake_format(cmake-format ${CMAKE_CODE})
