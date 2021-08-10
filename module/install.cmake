@@ -1,62 +1,60 @@
 macro(module_install_headers _include_dir)
   install(
     TARGETS ${PROJECT_NAME}
-    EXPORT ${PROJECT_NAME}Targets
+    EXPORT ${ADDON_APP}Targets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    INCLUDES
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  )
   install(DIRECTORY ${_include_dir} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 endmacro()
 
 macro(module_project_properties)
-  set_property(TARGET ${PROJECT_NAME} PROPERTY VERSION ${PROJECT_VERSION})
-  set_property(TARGET ${PROJECT_NAME} PROPERTY SOVERSION
-                                               ${PROJECT_VERSION_MAJOR})
-  set_property(
-    TARGET ${PROJECT_NAME} PROPERTY INTERFACE_${PROJECT_NAME}_MAJOR_VERSION
-                                    ${PROJECT_VERSION_MAJOR})
-  set_property(
-    TARGET ${PROJECT_NAME}
-    APPEND
-    PROPERTY COMPATIBLE_INTERFACE_STRING ${PROJECT_VERSION_MAJOR})
+  set_target_properties(${PROJECT_NAME} PROPERTIES
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION_MAJOR}
+    INTERFACE_${PROJECT_NAME}_MAJOR_VERSION ${PROJECT_VERSION_MAJOR}
+    COMPATIBLE_INTERFACE_STRING ${PROJECT_VERSION_MAJOR}
+  )
 endmacro()
 
 macro(module_install_cmake_config _include_dir)
   include(CMakePackageConfigHelpers)
 
-  module_project_properties()
-
   write_basic_package_version_file(
-    "${ADDON_MODULE_PACKAGES_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    "${ADDON_MODULE_PACKAGES_DIR}/${ADDON_APP}ConfigVersion.cmake"
     VERSION ${PROJECT_VERSION}
     COMPATIBILITY SameMajorVersion)
 
-  export(EXPORT ${PROJECT_NAME}Targets
+  export(EXPORT ${ADDON_APP}Targets
          FILE "${ADDON_MODULE_PACKAGES_DIR}/${PROJECT_NAME}.cmake")
 
   set(CONFIG_SOURCE_DIR ${CMAKE_SOURCE_DIR})
   set(CONFIG_DIR ${CMAKE_BINARY_DIR})
   set(${PROJECT_NAME}_INCLUDE_DIR "${_include_dir}")
   configure_package_config_file(
-    ${CMAKE_SOURCE_DIR}/cmake/templates/module.cmake.in
-    "${ADDON_MODULE_PACKAGES_DIR}/${PROJECT_NAME}Config.cmake"
-    INSTALL_DESTINATION lib/cmake/${PROJECT_NAME}
-    PATH_VARS ${PROJECT_NAME}_INCLUDE_DIR)
+    ${CMAKE_SOURCE_DIR}/${ADDON_DIRNAME}/templates/module.cmake.in
+    "${ADDON_MODULE_PACKAGES_DIR}/${ADDON_APP}Config.cmake"
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${ADDON_APP}
+    PATH_VARS CMAKE_INSTALL_LIBDIR
+  )
+
+  module_project_properties()
 
   install(
-    EXPORT ${PROJECT_NAME}Targets
-    FILE ${PROJECT_NAME}Targets.cmake
-    NAMESPACE ${PROJECT_NAME}::
-    DESTINATION lib/cmake/${PROJECT_NAME})
+    EXPORT ${ADDON_APP}Targets
+    NAMESPACE ${ADDON_APP}::
+    DESTINATION lib/cmake/${ADDON_APP}
+  )
 
   install(
-    FILES "${ADDON_MODULE_PACKAGES_DIR}/${PROJECT_NAME}Config.cmake"
-          "${ADDON_MODULE_PACKAGES_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-    DESTINATION lib/cmake/${PROJECT_NAME}
-    COMPONENT ${PROJECT_NAME})
+    FILES "${ADDON_MODULE_PACKAGES_DIR}/${ADDON_APP}Config.cmake"
+          "${ADDON_MODULE_PACKAGES_DIR}/${ADDON_APP}ConfigVersion.cmake"
+    DESTINATION lib/cmake/${ADDON_APP}
+    COMPONENT ${PROJECT_NAME}
+  )
 
   export(PACKAGE ${PROJECT_NAME})
 endmacro()
