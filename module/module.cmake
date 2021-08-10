@@ -30,6 +30,7 @@ macro(create_module)
     module_install(${MODULE_INCLUDE_DIR} NO NO ${MODULE_DEPENDENCIES})
   elseif(${MODULE_TYPE} STREQUAL library)
     add_library(${MODULE_NAME} SHARED ${MODULE_HEADERS} ${MODULE_SOURCES})
+    add_library(${ADDON_APP}::${MODULE_NAME} ALIAS ${MODULE_NAME})
 
     set(oneValueArgs PKGCONF CMAKE)
     cmake_parse_arguments(EXPORTS "" "${oneValueArgs}" "" ${MODULE_EXPORT})

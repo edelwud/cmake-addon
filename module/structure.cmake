@@ -29,5 +29,5 @@ endmacro()
 macro(module_include_public_headers _include)
   target_include_directories(
     ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${_include}>
-                           $<INSTALL_INTERFACE:include}>)
+  )
 endmacro()
