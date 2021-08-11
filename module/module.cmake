@@ -9,18 +9,16 @@ macro(create_module)
   project(
     ${MODULE_NAME}
     VERSION "${MODULE_VERSION}"
-    DESCRIPTION "${MODULE_DESCRIPTION}")
+    DESCRIPTION "${MODULE_DESCRIPTION}"
+  )
 
   set(MODULE_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/${ADDON_MODULE_INCLUDE_DIR}")
-  set(MODULE_INCLUDE_DIR
-      "${CMAKE_CURRENT_SOURCE_DIR}/${ADDON_MODULE_INCLUDE_DIR}/${PROJECT_NAME}")
-  set(MODULE_SOURCE_DIR
-      "${CMAKE_CURRENT_SOURCE_DIR}/${ADDON_MODULE_SOURCE_DIR}")
+  set(MODULE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${ADDON_MODULE_INCLUDE_DIR}/${PROJECT_NAME}")
+  set(MODULE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${ADDON_MODULE_SOURCE_DIR}")
   set(MODULE_TESTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${ADDON_MODULE_TESTS_DIR}")
 
   validate_module()
-  configure_file(${ADDON_PATH}/templates/version.h.in
-                 ${CMAKE_CURRENT_BINARY_DIR}/version.h @ONLY)
+  configure_file(${ADDON_PATH}/templates/version.h.in ${CMAKE_CURRENT_BINARY_DIR}/version.h @ONLY)
 
   collect_module_headers("${MODULE_INCLUDE_DIR}" "MODULE_HEADERS")
   collect_module_sources("${MODULE_SOURCE_DIR}" "MODULE_SOURCES")
@@ -29,19 +27,12 @@ macro(create_module)
     add_executable(${MODULE_NAME} ${MODULE_HEADERS} ${MODULE_SOURCES})
     module_install(${MODULE_INCLUDE_DIR} NO NO ${MODULE_DEPENDENCIES})
   elseif(${MODULE_TYPE} STREQUAL library)
-    add_library(${MODULE_NAME} SHARED ${MODULE_HEADERS} ${MODULE_SOURCES})
+    add_library(${MODULE_NAME} STATIC ${MODULE_HEADERS} ${MODULE_SOURCES})
+    add_library(${ADDON_APP}::${MODULE_NAME} ALIAS ${MODULE_NAME})
 
     set(oneValueArgs PKGCONF CMAKE)
     cmake_parse_arguments(EXPORTS "" "${oneValueArgs}" "" ${MODULE_EXPORT})
-    module_install(${MODULE_INCLUDE_DIR} ${EXPORTS_PKGCONF} ${EXPORTS_CMAKE}
-                   ${MODULE_DEPENDENCIES})
-  elseif(${MODULE_TYPE} STREQUAL library_static)
-    add_library(${MODULE_NAME} ${MODULE_HEADERS} ${MODULE_SOURCES})
-
-    set(oneValueArgs PKGCONF CMAKE)
-    cmake_parse_arguments(EXPORTS "" "${oneValueArgs}" "" ${MODULE_EXPORT})
-    module_install(${MODULE_INCLUDE_DIR} ${EXPORTS_PKGCONF} ${EXPORTS_CMAKE}
-                   ${MODULE_DEPENDENCIES})
+    module_install(${MODULE_INCLUDE_DIR} ${EXPORTS_PKGCONF} ${EXPORTS_CMAKE} ${MODULE_DEPENDENCIES})
   endif()
 
   if(DEFINED MODULE_DEPENDENCIES)
@@ -69,23 +60,14 @@ endmacro()
 
 macro(validate_module)
   if(NOT EXISTS "${MODULE_INCLUDE_DIR}")
-    message(
-      FATAL_ERROR
-        "Module ${MODULE_NAME} should contain \"${MODULE_INCLUDE_DIR}\" directory"
-    )
+    message(FATAL_ERROR "Module ${MODULE_NAME} should contain \"${MODULE_INCLUDE_DIR}\" directory")
   endif()
 
   if(NOT EXISTS "${MODULE_SOURCE_DIR}")
-    message(
-      FATAL_ERROR
-        "Module ${MODULE_NAME} should contain \"${MODULE_SOURCE_DIR}\" directory"
-    )
+    message(FATAL_ERROR "Module ${MODULE_NAME} should contain \"${MODULE_SOURCE_DIR}\" directory")
   endif()
 
   if(NOT EXISTS "${MODULE_TESTS_DIR}")
-    message(
-      FATAL_ERROR
-        "Module ${MODULE_NAME} should contain \"${MODULE_TESTS_DIR}\" directory"
-    )
+    message(FATAL_ERROR "Module ${MODULE_NAME} should contain \"${MODULE_TESTS_DIR}\" directory")
   endif()
 endmacro()
