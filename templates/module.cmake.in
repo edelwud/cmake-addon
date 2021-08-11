@@ -5,6 +5,4 @@ set_and_check(@ADDON_APP@_INCLUDE_DIRS "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_IN
 set_and_check(@ADDON_APP@_LIBRARY_DIRS "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@")
 set(@ADDON_APP@_LIBRARIES "@ADDON_APP@")
 
-check_required_components(@all_targets@)
-
 message(STATUS "@ADDON_APP@ found. Headers: ${@ADDON_APP@_INCLUDE_DIRS}")

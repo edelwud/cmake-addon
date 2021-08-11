@@ -29,8 +29,6 @@ macro(modules_install_cmake_config)
 
   include(CMakePackageConfigHelpers)
 
-  get_all_targets(all_targets)
-
   configure_package_config_file(
     ${CMAKE_SOURCE_DIR}/${ADDON_DIRNAME}/templates/module.cmake.in
     "${ADDON_MODULE_PACKAGES_DIR}/${ADDON_APP}Config.cmake"
