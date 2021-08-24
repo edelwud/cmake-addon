@@ -5,8 +5,10 @@ if(NOT EXISTS "${ADDON_PATH}")
 endif()
 
 include(${ADDON_PATH}/tools.cmake)
+include(${ADDON_PATH}/conan.cmake)
 include(${ADDON_PATH}/CPM.cmake)
 include(${ADDON_PATH}/predefines.cmake)
+
 
 set(ADDON_DOCS_PATH ${CMAKE_SOURCE_DIR}/${ADDON_DOCS})
 if(NOT EXISTS "${ADDON_DOCS_PATH}")
