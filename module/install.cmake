@@ -47,10 +47,9 @@ macro(modules_install_cmake_config)
     DESTINATION lib/cmake/${ADDON_APP}
   )
 
-  install(
-    FILES "${ADDON_MODULE_PACKAGES_DIR}/${ADDON_APP}Config.cmake"
-          "${ADDON_MODULE_PACKAGES_DIR}/${ADDON_APP}ConfigVersion.cmake"
-    DESTINATION lib/cmake/${ADDON_APP}
+  install(FILES "${ADDON_MODULE_PACKAGES_DIR}/${ADDON_APP}Config.cmake"
+                "${ADDON_MODULE_PACKAGES_DIR}/${ADDON_APP}ConfigVersion.cmake"
+          DESTINATION lib/cmake/${ADDON_APP}
   )
 endmacro()
 
