@@ -1,4 +1,11 @@
-CPMAddPackage("gh:StableCoder/cmake-scripts#21.01")
+include(FetchContent)
+
+FetchContent_Declare(
+  cmake-scripts
+  GIT_REPOSITORY https://github.com/StableCoder/cmake-scripts.git
+  GIT_TAG 21.01)
+
+FetchContent_MakeAvailable(cmake-scripts)
 
 set(CLANG_TIDY ON)
 
@@ -15,9 +22,10 @@ file(GLOB_RECURSE APP_HEADERS ${ADDON_APP_PATH}/**/*.h*)
 
 file(GLOB_RECURSE CMAKE_CODE *.cmake)
 file(GLOB_RECURSE CMAKE_BUILD_CODE ${CMAKE_SOURCE_DIR}/build/**/*.cmake)
-foreach(BUILD_CMAKE ${CMAKE_BUILD_CODE})
-  list(REMOVE_ITEM CMAKE_CODE ${BUILD_CMAKE})
+foreach(build_cmake ${CMAKE_BUILD_CODE})
+  list(REMOVE_ITEM CMAKE_CODE ${build_cmake})
 endforeach()
 
-clang_format(clang-format ${APP_HEADERS} ${APP_SOURCES} ${LIBS_HEADERS} ${LIBS_SOURCES})
+clang_format(clang-format ${APP_HEADERS} ${APP_SOURCES} ${LIBS_HEADERS}
+             ${LIBS_SOURCES})
 cmake_format(cmake-format ${CMAKE_CODE})

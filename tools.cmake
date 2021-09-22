@@ -1,41 +1,56 @@
-macro(copy_file_before_build _target _filepath_in _filepath_out)
-  addon_debug("TARGET ${_target} COPY FILE FROM ${_filepath_in} TO ${_filepath_out}")
+# Copies file before selected target builds
+macro(COPY_FILE_BEFORE_BUILD target filepath_in filepath_out)
+  addon_debug(
+    "TARGET ${target} COPY FILE FROM ${filepath_in} TO ${filepath_out}")
   add_custom_command(
-    TARGET ${_target}
+    TARGET ${target}
     PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${_filepath_in} ${_filepath_out}
-  )
-endmacro(copy_file_before_build)
+    COMMENT File copy
+    COMMAND ${CMAKE_COMMAND} -E copy ${filepath_in} ${filepath_out})
+endmacro(COPY_FILE_BEFORE_BUILD)
 
-macro(copy_dir_before_build _target _dirpath_in _dirpath_out)
-  addon_debug("TARGET ${_target} COPY DIR FROM ${_dirpath_in} TO ${_dirpath_out}")
+# Copies directory before selected target builds
+macro(COPY_DIR_BEFORE_BUILD target dirpath_in dirpath_out)
+  addon_debug("TARGET ${target} COPY DIR FROM ${dirpath_in} TO ${dirpath_out}")
   add_custom_command(
-    TARGET ${_target}
+    TARGET ${target}
     PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${_dirpath_in} ${_dirpath_out}
-  )
-endmacro(copy_dir_before_build)
+    COMMENT Directory copy
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${dirpath_in} ${dirpath_out})
+endmacro(COPY_DIR_BEFORE_BUILD)
 
-macro(get_parent_dirname _dirname)
-  get_filename_component(${_dirname} ${CMAKE_CURRENT_SOURCE_DIR} NAME_WLE)
-endmacro()
+# Gets parent name from current directory
+macro(GET_PARENT_DIRNAME dirname)
+  get_filename_component(${dirname} ${CMAKE_CURRENT_SOURCE_DIR} NAME_WLE)
+endmacro(GET_PARENT_DIRNAME)
 
-macro(get_last_dirname _path _dirname)
-  get_filename_component(${_dirname} ${_path} NAME_WLE)
-endmacro()
+# Gets parent name from passed directory
+macro(GET_LAST_DIRNAME path dirname)
+  get_filename_component(${dirname} ${path} NAME_WLE)
+endmacro(GET_LAST_DIRNAME)
 
+# Gets all defined targets
 function(get_all_targets var)
   set(targets)
   get_all_targets_recursive(targets ${CMAKE_CURRENT_SOURCE_DIR})
-  set(${var} ${targets} PARENT_SCOPE)
-endfunction()
+  set(${var}
+      ${targets}
+      PARENT_SCOPE)
+endfunction(get_all_targets)
 
-macro(get_all_targets_recursive targets dir)
-  get_property(subdirectories DIRECTORY ${dir} PROPERTY SUBDIRECTORIES)
+# Recursive scan targets
+macro(GET_ALL_TARGETS_RECURSIVE targets dir)
+  get_property(
+    subdirectories
+    DIRECTORY ${dir}
+    PROPERTY SUBDIRECTORIES)
   foreach(subdir ${subdirectories})
     get_all_targets_recursive(${targets} ${subdir})
   endforeach()
 
-  get_property(current_targets DIRECTORY ${dir} PROPERTY BUILDSYSTEM_TARGETS)
+  get_property(
+    current_targets
+    DIRECTORY ${dir}
+    PROPERTY BUILDSYSTEM_TARGETS)
   list(APPEND ${targets} ${current_targets})
 endmacro()
