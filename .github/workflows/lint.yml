@@ -1,0 +1,28 @@
+
+name: Lint
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    tags:
+      - "*"
+  pull_request:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup cmake toolchain
+        run: pip install trim cmakelang
+
+      - name: Check whitespace
+        run: |
+          trim *.cmake
+          git diff --exit-code
+
+      - name: Lint cmake files
+        run: |
+          cmake-lint *.cmake
